@@ -3,10 +3,19 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
 
-    if params[:sort_by]
+    if params[:sort_by] == "title"
       @movies = Movie.order("title")
-    elsif params[:sort]
+    else
       @movies = Movie.order("release_date")
+    end
+    
+    @all_ratings = Movie.all_ratings
+
+    if params[:ratings]
+      selected_ratings = params[:ratings].keys
+      selected_ratings.each do |rating|
+       @movie = Movie.where("rating = :rating", :rating => rating)
+      end
     end
   end
 
